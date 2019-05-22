@@ -21,7 +21,7 @@ public class UserService {
         return userRepository.saveAndFlush(user);
     }
 
-    public User getUserById(Long id) {
-        return userRepository.getById(id);
+    public User getUserByLogin(String username) {
+        return userRepository.getByUsername(username);
     }
 }
