@@ -13,8 +13,16 @@ public class Section  extends CommonEntity{
     @NotNull
     private String name;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @ManyToOne
     @JoinColumn(name = "job_id")
     private Job job;
+
 }
