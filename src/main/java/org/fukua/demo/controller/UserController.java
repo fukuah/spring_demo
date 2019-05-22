@@ -25,4 +25,7 @@ public class UserController {
 
         return user;
     }
+
+    @RequestMapping(value = "user/{id}", method={RequestMethod.POST,RequestMethod.GET})
+    public User getUser(@RequestParam("id") Long id) { return userService.getUserById(id); }
 }

@@ -1,9 +1,7 @@
 package org.fukua.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import net.bytebuddy.implementation.bind.annotation.Default;
-import org.fukua.demo.Entity.Enum.Status;
-import org.joda.time.DateTime;
+import org.fukua.demo.Entity.Enum.UserStatus;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,22 +16,22 @@ public class User extends CommonEntity{
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
-    @Size(min=6, max=20)
+    @Size(min=5, max=20)
     @NotNull
     private String username;
-    @Size(min=6, max=50)
+    @Size(min=4, max=50)
     @NotNull
     private String firstName;
-    @Size(min=6, max=50)
+    @Size(min=4, max=50)
     @NotNull
     private String lastName;
-    @Size(min=6, max=50)
+    @Size(min=4, max=50)
     private String middleName;
     @Email
     @NotNull
     private String email;
     private Boolean isAdmin = false;
-    private Status status = Status.ACTIVATION_NEEDED;
+    private UserStatus status = UserStatus.ACTIVATION_NEEDED;
 
     @JsonIgnore
     private String passwordHash;
@@ -94,11 +92,11 @@ public class User extends CommonEntity{
         isAdmin = admin;
     }
 
-    public Status getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(UserStatus status) {
         this.status = status;
     }
 

@@ -4,17 +4,25 @@ import org.joda.time.DateTime;
 
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import java.sql.Timestamp;
+import java.util.Date;
 
 public class EntityListener {
     @PreUpdate
     public void beforeUpdate(CommonEntity o) {
-        o.setUpdatedAt(DateTime.now());
+        Date date= new Date();
+
+        long time = date.getTime();
+        o.setUpdatedAt(new Timestamp(time));
         System.out.println("postUpdate" + o.toString());
     }
 
     @PrePersist
     public void beforeCreate(CommonEntity o) {
-        o.setCreatedAt(DateTime.now());
+        Date date= new Date();
+
+        long time = date.getTime();
+        o.setCreatedAt(new Timestamp(time));
         System.out.println("postUpdate" + o.toString());
     }
 }
