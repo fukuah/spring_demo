@@ -1,5 +1,7 @@
 package org.fukua.demo.Entity;
 
+import org.fukua.demo.Entity.Enum.JobStatus;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,4 +20,5 @@ public class Job extends CommonEntity{
     @OneToOne
     private User user;
 
+    private JobStatus status;
 }
