@@ -14,4 +14,8 @@ public class Job extends CommonEntity{
 
     @OneToMany
     private List<Section> sections = new ArrayList<Section>();
+
+    @OneToOne
+    private User user;
+
 }
