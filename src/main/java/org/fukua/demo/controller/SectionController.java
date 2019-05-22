@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("xls-section")
+@RequestMapping("section")
 public class SectionController {
     @Autowired
     private SectionService sectionService;
-
 
 }
