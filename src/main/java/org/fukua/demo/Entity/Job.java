@@ -20,5 +20,5 @@ public class Job extends CommonEntity{
     @OneToOne
     private User user;
 
-    private JobStatus status;
+    private JobStatus status = JobStatus.PROCESSING;
 }
