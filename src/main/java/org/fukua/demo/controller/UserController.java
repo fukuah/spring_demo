@@ -26,6 +26,6 @@ public class UserController {
         return user;
     }
 
-    @RequestMapping(value = "get-one", method={RequestMethod.POST,RequestMethod.GET})
-    public User getUser(@RequestParam("username") String username) { return userService.getUserByLogin(username); }
+    @RequestMapping(value="{username}", method={RequestMethod.GET})
+    public User getUser(@PathVariable("username") String username) { return userService.getUserByLogin(username); }
 }
