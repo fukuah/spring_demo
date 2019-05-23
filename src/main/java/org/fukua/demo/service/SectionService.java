@@ -47,6 +47,6 @@ public class SectionService {
     }
 
     public void deleteSection(long id) {
-        sectionRepository.delete(sectionRepository.getById(id));
+        sectionRepository.deleteById(id);
     }
 }
