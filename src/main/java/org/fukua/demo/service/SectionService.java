@@ -21,9 +21,6 @@ public class SectionService {
         section.setJob(job);
         section.setName(name);
         section.setGeologicalClassList(geologicalClassList);
-        for (GeologicalClass item: section.getGeologicalClassList()) {
-            geologicalClassService.createGeologicalClassNode(item);
-        }
 
         sectionRepository.save(section);
     }

@@ -1,12 +1,10 @@
 package org.fukua.demo.service;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.fukua.demo.Entity.Enum.JobStatus;
 import org.fukua.demo.Entity.GeologicalClass;
 import org.fukua.demo.Entity.Job;
+import org.fukua.demo.Entity.Section;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Async;
@@ -14,48 +12,46 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Configuration
 @EnableAsync
-public class XlsFileParserService {
+public class XlsFileParserService implements XlsFileParserInterface {
 
     @Autowired
     private SectionService sectionService;
+
     @Autowired
     private JobService jobService;
 
     @Async
     public void storeData(Workbook workbook, Job job) throws IOException {
         for (Sheet sheet : workbook) {
-
-            String sectionName = null;
-            List<GeologicalClass> geologicalClassList = null;
+            Section section = null;
             for (Row row : sheet) {
-                // Parse data from xls document to database
-                if (isSectionDefinitionRow(row)) {
-                    if (sectionName != null) {
-                        sectionService.createSection(job, sectionName, geologicalClassList);
+                String rowSectionName = getCellValue(row, 0),
+                        geologicalClassName = getCellValue(row, 1),
+                        geologicalClassCode = getCellValue(row, 2);
+
+                if (rowSectionName != null) {
+                    if (section != null) {
+                        sectionService.createSection(section);
                     }
-                    sectionName = row.getCell(0).getStringCellValue();
-                    geologicalClassList = new ArrayList<>();
-                    String geologicalClassName = row.getCell(1).getStringCellValue(),
-                            geologicalClassCode = row.getCell(1).getStringCellValue();
+                    section = new Section();
+                    section.setJob(job);
+                    section.setName(rowSectionName);
+                }
 
-                    geologicalClassList.add(new GeologicalClass(geologicalClassName, geologicalClassCode));
-
-                } else if (isGeologicalClassRow(row)) {
-                    String geologicalClassName = row.getCell(1).getStringCellValue(),
-                            geologicalClassCode = row.getCell(1).getStringCellValue();
-
-                    if (geologicalClassList != null) {
-                        geologicalClassList.add(new GeologicalClass(geologicalClassName, geologicalClassCode));
-                    }
+                if (section != null) {
+                    section.getGeologicalClassList().add(new GeologicalClass(geologicalClassName, geologicalClassCode));
                 }
             }
+
+            if (section != null) {
+                sectionService.createSection(section);
+            }
         }
+
         workbook.close();
 
         // Change status of a job after parsing is completed
@@ -66,15 +62,16 @@ public class XlsFileParserService {
     public boolean validate(Workbook workbook) {
         for(Sheet sheet: workbook) {
             // This is safe code (someone could put beginning of a table not in A1 cell)
-            Cell firstCell = sheet.getRow(0)
-                    .getCell(0);
+            String firstCellValue = getCellValue(sheet.getRow(0), 0);
 
             // Check for invalid format
-            if (firstCell == null) {
+            if (firstCellValue == null) {
                 return false;
             }
+
             for (Row row: sheet) {
-                if (!isSectionDefinitionRow(row) && !isGeologicalClassRow(row)) {
+                int rowSize = row.getPhysicalNumberOfCells();
+                if (rowSize != 2 && rowSize != 3) {
                     return false;
                 }
             }
@@ -83,11 +80,13 @@ public class XlsFileParserService {
         return true;
     }
 
-    private boolean isSectionDefinitionRow(Row row) {
-        return row.getPhysicalNumberOfCells() == 3;
-    }
+    private String getCellValue(Row row, int i) {
+        Cell cell = row.getCell(i);
+        if (cell != null) {
+            cell.setCellType(CellType.STRING);
+            return cell.getStringCellValue();
+        }
 
-    private boolean isGeologicalClassRow(Row row) {
-        return row.getPhysicalNumberOfCells() == 2;
+        return null;
     }
 }

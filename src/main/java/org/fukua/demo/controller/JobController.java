@@ -33,33 +33,31 @@ public class JobController {
     @Autowired
     private XlsFileParserService parsingService;
 
-    @RequestMapping(value="{username}", method={RequestMethod.POST}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json; charset=utf-8")
+    @RequestMapping(value="{username}", method={RequestMethod.PUT}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json; charset=utf-8")
     public ResponseEntity<Map> loadXlsFile(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) throws IOException{
         Map<String, String> response = new HashMap<>();
 
         try {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
             Job job = jobService.createJob(username);
+            response.put("job_id", Long.toString(job.getId()));
 
-            if (parsingService.validate(workbook)) {
-                parsingService.storeData(workbook, job);
-            } else {
+            if (!parsingService.validate(workbook)) {
                 job.setStatus(JobStatus.FAILED);
                 jobService.save(job);
 
-                response.put("job_id", job.getId() + "");
                 response.put("error", "file is of invalid format.");
                 return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
             }
 
-            response.put("job_id", job.getId() + "");
+            parsingService.storeData(workbook, job);
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 
         } catch (InvalidFormatException | org.apache.poi.openxml4j.exceptions.InvalidFormatException e) {
             Job job = jobService.createJob(username);
             job.setStatus(JobStatus.FAILED);
             jobService.save(job);
-            response.put("job_id", job.getId() + "");
+            response.put("job_id", Long.toString(job.getId()));
             response.put("error", "file is not of xls or xlsx type.");
             return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
         }
