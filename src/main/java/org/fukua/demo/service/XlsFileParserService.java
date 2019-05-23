@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.fukua.demo.Entity.Enum.JobStatus;
 import org.fukua.demo.Entity.GeologicalClass;
 import org.fukua.demo.Entity.Job;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,8 @@ public class XlsFileParserService {
 
     @Autowired
     private SectionService sectionService;
-
-    final private int cellsInRowWithClasses = 2;
-    final private int cellsInRow2 = 3;
+    @Autowired
+    private JobService jobService;
 
     @Async
     public void storeData(Workbook workbook, Job job) throws IOException {
@@ -57,6 +57,10 @@ public class XlsFileParserService {
             }
         }
         workbook.close();
+
+        // Change status of a job after parsing is completed
+        job.setStatus(JobStatus.COMPLETE);
+        jobService.save(job);
     }
 
     public boolean validate(Workbook workbook) {

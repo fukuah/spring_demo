@@ -18,4 +18,8 @@ public class JobService {
          return jobRepository.save(job);
      }
 
+     public void save(Job job){
+         jobRepository.save(job);
+     }
+
 }

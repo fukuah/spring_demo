@@ -3,8 +3,6 @@ package org.fukua.demo.Entity;
 import org.fukua.demo.Entity.Enum.JobStatus;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,4 +44,8 @@ public class Job extends CommonEntity{
     }
 
     private JobStatus status = JobStatus.PROCESSING;
+
+    public long getId() {
+        return id;
+    }
 }
