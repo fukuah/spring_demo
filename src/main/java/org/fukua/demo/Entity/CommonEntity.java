@@ -1,9 +1,5 @@
 package org.fukua.demo.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.joda.time.DateTime;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;

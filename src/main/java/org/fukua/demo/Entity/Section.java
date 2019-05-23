@@ -1,5 +1,8 @@
 package org.fukua.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -12,15 +15,18 @@ public class Section  extends CommonEntity{
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
-    @Size(max=100)
-    @NotNull
+    @Size(max=2000)
+    @NotNull(message = "Section name is required.")
     private String name;
 
     @ManyToOne
+    @Nullable
+    @JsonIgnore
     @JoinColumn(name = "job_id")
     private Job job;
 
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.ALL})
+    @JoinColumn(name="section_id")
     private List<GeologicalClass> geologicalClassList = new ArrayList<>();
 
     public List<GeologicalClass> getGeologicalClassList() {
@@ -30,6 +36,12 @@ public class Section  extends CommonEntity{
     public void setGeologicalClassList(List<GeologicalClass> geologicalClassList) {
         this.geologicalClassList = geologicalClassList;
     }
+
+    public long getId() {
+        return id;
+    }
+
+    public Section(){}
 
     public String getName() {
         return name;

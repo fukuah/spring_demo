@@ -1,10 +1,14 @@
 package org.fukua.demo.repository;
 
-import org.fukua.demo.Entity.User;
 import org.fukua.demo.Entity.Section;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface SectionRepository extends JpaRepository<Section, Long> {
+public interface SectionRepository extends CrudRepository<Section, Long> {
+    public Section getById(long id);
+
+    List<Section> getByJobId(long id);
 }

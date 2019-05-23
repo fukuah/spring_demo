@@ -1,7 +1,5 @@
 package org.fukua.demo.Entity;
 
-import org.joda.time.DateTime;
-
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import java.sql.Timestamp;

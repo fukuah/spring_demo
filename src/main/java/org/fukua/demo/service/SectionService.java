@@ -25,6 +25,31 @@ public class SectionService {
             geologicalClassService.createGeologicalClassNode(item);
         }
 
-        sectionRepository.saveAndFlush(section);
+        sectionRepository.save(section);
+    }
+
+    public Section createSection(Section section){
+        return sectionRepository.save(section);
+    }
+
+    public Section updateSection(long id, Section section) {
+        Section sectionToUpdate = sectionRepository.getById(id);
+        sectionToUpdate.setName(section.getName());
+        sectionToUpdate.setGeologicalClassList(section.getGeologicalClassList());
+
+        sectionRepository.save(section);
+        return sectionRepository.save(section);
+    }
+
+    public Section getById(long id) {
+        return sectionRepository.getById(id);
+    }
+
+    public List<Section> getSectionsByJobId(long id) {
+        return sectionRepository.getByJobId(id);
+    }
+
+    public void deleteSection(long id) {
+        sectionRepository.delete(sectionRepository.getById(id));
     }
 }
