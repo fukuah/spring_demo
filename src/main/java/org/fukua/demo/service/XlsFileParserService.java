@@ -1,6 +1,5 @@
 package org.fukua.demo.service;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -58,11 +57,6 @@ public class XlsFileParserService {
             }
         }
         workbook.close();
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     public boolean validate(Workbook workbook) {
