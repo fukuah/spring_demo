@@ -6,6 +6,11 @@ import javax.validation.constraints.Size;
 
 @Entity
 public class GeologicalClass{
+    public GeologicalClass(@Size(max = 100) @NotNull String name, @Size(max = 100) @NotNull String code) {
+        this.name = name;
+        this.code = code;
+    }
+
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;

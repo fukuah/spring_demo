@@ -13,12 +13,17 @@ import java.util.List;
 public class SectionService {
     @Autowired
     private SectionRepository sectionRepository;
+    @Autowired
+    private GeologicalClassService geologicalClassService;
 
     public void createSection(Job job, String name, List<GeologicalClass> geologicalClassList) {
         Section section = new Section();
         section.setJob(job);
         section.setName(name);
         section.setGeologicalClassList(geologicalClassList);
+        for (GeologicalClass item: section.getGeologicalClassList()) {
+            geologicalClassService.createGeologicalClassNode(item);
+        }
 
         sectionRepository.saveAndFlush(section);
     }

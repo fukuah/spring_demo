@@ -15,7 +15,7 @@ public class JobService {
      public Job createJob(String username){
          Job job = new Job();
          job.setUser(userService.getUserByLogin(username));
-         return job;
+         return jobRepository.save(job);
      }
 
 }

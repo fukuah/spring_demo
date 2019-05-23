@@ -3,6 +3,8 @@ package org.fukua.demo.controller;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellAddress;
+import org.fukua.demo.Entity.GeologicalClass;
+import org.fukua.demo.Entity.Job;
 import org.fukua.demo.service.JobService;
 import org.fukua.demo.service.SectionService;
 import org.fukua.demo.service.UserService;
@@ -15,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.ServletContext;
 import java.io.*;
 import java.security.Provider;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 @RestController
 @RequestMapping("job")
@@ -30,6 +34,7 @@ public class JobController {
     @RequestMapping(value="{username}", method={RequestMethod.POST}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String loadXlsFile(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) throws IOException {
 
+        Job job= jobService.createJob(username);
 
         byte [] buffer = file.getBytes();
 
@@ -47,26 +52,34 @@ public class JobController {
                     return "file is of invalid format.";
                 }
 
+
+                String sectionName = null;
+                List<GeologicalClass> geologicalClassList = null;
                 for (Row row: sheet) {
-                    String sectionName = null;
                     // Check for invalid format
-                    if (row.getPhysicalNumberOfCells() != 3 || row.getPhysicalNumberOfCells() != 2 ) {
+                    if (row.getPhysicalNumberOfCells() != 3 && row.getPhysicalNumberOfCells() != 2 ) {
                         return "file is of invalid format.";
                     }
                     // Parse data from xls document to database
-//                    if (row.getPhysicalNumberOfCells() == 3) {
-//                        if (sectionName != null) {
-//
-//                        }
-//
-//                        sectionName = row.getCell(0).getStringCellValue();
-//
-//                        for (Cell cell: row) {
-//
-//                        }
-//                    } else if (row.getPhysicalNumberOfCells() == 2) {
-//
-//                    }
+                    if (row.getPhysicalNumberOfCells() == 3) {
+                        if (sectionName != null) {
+                            sectionService.createSection(job, sectionName, geologicalClassList);
+                        }
+                        sectionName = row.getCell(0).getStringCellValue();
+                        geologicalClassList = new ArrayList<>();
+                        String geologicalClassName = row.getCell(1).getStringCellValue(),
+                        geologicalClassCode = row.getCell(1).getStringCellValue();
+
+                        geologicalClassList.add(new GeologicalClass(geologicalClassName, geologicalClassCode));
+
+                    } else if (row.getPhysicalNumberOfCells() == 2) {
+                        String geologicalClassName = row.getCell(1).getStringCellValue(),
+                                geologicalClassCode = row.getCell(1).getStringCellValue();
+
+                        if (geologicalClassList != null) {
+                            geologicalClassList.add(new GeologicalClass(geologicalClassName, geologicalClassCode));
+                        }
+                    }
                 }
 
             }
