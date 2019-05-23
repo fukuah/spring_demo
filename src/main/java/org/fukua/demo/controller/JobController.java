@@ -8,6 +8,7 @@ import org.fukua.demo.Entity.Job;
 import org.fukua.demo.service.JobService;
 import org.fukua.demo.service.SectionService;
 import org.fukua.demo.service.UserService;
+import org.fukua.demo.service.XlsFileParserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -30,77 +31,29 @@ public class JobController {
     private UserService userService;
     @Autowired
     private SectionService sectionService;
+    @Autowired
+    private XlsFileParserService parsingService;
 
     @RequestMapping(value="{username}", method={RequestMethod.POST}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String loadXlsFile(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) throws IOException {
 
-        Job job= jobService.createJob(username);
+        Job job = jobService.createJob(username);
 
         byte [] buffer = file.getBytes();
 
-        String s = "";
+        String s = "File is loaded";
         try {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
 
-            for(Sheet sheet: workbook) {
-                // This is safe code (someone could put beginning of a table not in A1 cell)
-                Cell firstCell = sheet.getRow(0)
-                        .getCell(0);
-
-                // Check for invalid format
-                if (firstCell == null) {
-                    return "file is of invalid format.";
-                }
-
-
-                String sectionName = null;
-                List<GeologicalClass> geologicalClassList = null;
-                for (Row row: sheet) {
-                    // Check for invalid format
-                    if (row.getPhysicalNumberOfCells() != 3 && row.getPhysicalNumberOfCells() != 2 ) {
-                        return "file is of invalid format.";
-                    }
-                    // Parse data from xls document to database
-                    if (row.getPhysicalNumberOfCells() == 3) {
-                        if (sectionName != null) {
-                            sectionService.createSection(job, sectionName, geologicalClassList);
-                        }
-                        sectionName = row.getCell(0).getStringCellValue();
-                        geologicalClassList = new ArrayList<>();
-                        String geologicalClassName = row.getCell(1).getStringCellValue(),
-                        geologicalClassCode = row.getCell(1).getStringCellValue();
-
-                        geologicalClassList.add(new GeologicalClass(geologicalClassName, geologicalClassCode));
-
-                    } else if (row.getPhysicalNumberOfCells() == 2) {
-                        String geologicalClassName = row.getCell(1).getStringCellValue(),
-                                geologicalClassCode = row.getCell(1).getStringCellValue();
-
-                        if (geologicalClassList != null) {
-                            geologicalClassList.add(new GeologicalClass(geologicalClassName, geologicalClassCode));
-                        }
-                    }
-                }
-
+            if (parsingService.validate(workbook)) {
+                parsingService.storeData(workbook, job);
+            } else {
+                return "file is of invalid format";
             }
-            workbook.close();
+
         } catch (InvalidFormatException | org.apache.poi.openxml4j.exceptions.InvalidFormatException e) {
             e.printStackTrace();
         }
-
-//        return servletContext.getResourcePaths("/tmp/xls/");
-//        if (convertFile.createNewFile()) {
-//            FileOutputStream fout = new FileOutputStream(convertFile);
-//            fout.write(file.getBytes());
-//            fout.close();
-//        }
-//
-//        Job job = new Job();
-//        User user = userService.getUserByLogin(username);
-//        if (user != null) {
-//            job.setUser(user);
-//            return jobService.createJob(job);
-//        }
 
         return s;
     }
