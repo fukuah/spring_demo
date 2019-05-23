@@ -8,7 +8,7 @@ import javax.validation.constraints.Size;
 public class GeologicalClass{
     public GeologicalClass() {}
 
-    public GeologicalClass(@Size(max = 100) @NotNull String name, @Size(max = 100) @NotNull String code) {
+    public GeologicalClass(@Size(max = 1000) @NotNull String name, @Size(max = 1000) @NotNull String code) {
         this.name = name;
         this.code = code;
     }
@@ -17,7 +17,7 @@ public class GeologicalClass{
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
-    @Size(max=100)
+    @Size(max=1000)
     @NotNull
     private String name;
 
@@ -40,7 +40,7 @@ public class GeologicalClass{
         this.code = code;
     }
 
-    @Size(max=100)
+    @Size(max=1000)
     @NotNull
     private String code;
 }

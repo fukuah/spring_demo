@@ -5,6 +5,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.fukua.demo.Entity.Enum.JobStatus;
 import org.fukua.demo.Entity.Job;
+import org.fukua.demo.exception.NotXlsOrXlsxFileProvided;
+import org.fukua.demo.exception.XlsFileIsOfInvalidFormat;
 import org.fukua.demo.service.JobService;
 import org.fukua.demo.service.SectionService;
 import org.fukua.demo.service.UserService;
@@ -46,8 +48,7 @@ public class JobController {
                 job.setStatus(JobStatus.FAILED);
                 jobService.save(job);
 
-                response.put("error", "file is of invalid format.");
-                return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+                throw  new XlsFileIsOfInvalidFormat();
             }
 
             parsingService.storeData(workbook, job);
@@ -57,9 +58,8 @@ public class JobController {
             Job job = jobService.createJob(username);
             job.setStatus(JobStatus.FAILED);
             jobService.save(job);
-            response.put("job_id", Long.toString(job.getId()));
-            response.put("error", "file is not of xls or xlsx type.");
-            return new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
+
+            throw new NotXlsOrXlsxFileProvided();
         }
     }
 }
