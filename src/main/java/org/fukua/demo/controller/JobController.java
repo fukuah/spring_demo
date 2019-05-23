@@ -1,10 +1,10 @@
 package org.fukua.demo.controller;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellAddress;
 import org.fukua.demo.service.JobService;
+import org.fukua.demo.service.SectionService;
 import org.fukua.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.ServletContext;
 import java.io.*;
+import java.security.Provider;
+import java.util.Iterator;
 
 @RestController
 @RequestMapping("job")
@@ -23,29 +25,52 @@ public class JobController {
     @Autowired
     private UserService userService;
     @Autowired
-    private ServletContext servletContext;
+    private SectionService sectionService;
 
     @RequestMapping(value="{username}", method={RequestMethod.POST}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String loadXlsFile(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) throws IOException {
-//        File convertFile = new File("/tmp/xls/" + file.getOriginalFilename());
+
 
         byte [] buffer = file.getBytes();
-
-
-//        File targetFile  = new File("tmp/xls/" + file.getOriginalFilename());
-//        OutputStream outStream = new FileOutputStream(targetFile);
-//        outStream.write(buffer);
-//        outStream.close();
-
 
         String s = "";
         try {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
 
             for(Sheet sheet: workbook) {
-                s += "=> " + sheet.getSheetName();
-            }
+                // This is safe code (someone could put beginning of a table not in A1 cell)
+                Cell firstCell = sheet.getRow(0)
+                        .getCell(0);
 
+                // Check for invalid format
+                if (firstCell == null) {
+                    return "file is of invalid format.";
+                }
+
+                for (Row row: sheet) {
+                    String sectionName = null;
+                    // Check for invalid format
+                    if (row.getPhysicalNumberOfCells() != 3 || row.getPhysicalNumberOfCells() != 2 ) {
+                        return "file is of invalid format.";
+                    }
+                    // Parse data from xls document to database
+//                    if (row.getPhysicalNumberOfCells() == 3) {
+//                        if (sectionName != null) {
+//
+//                        }
+//
+//                        sectionName = row.getCell(0).getStringCellValue();
+//
+//                        for (Cell cell: row) {
+//
+//                        }
+//                    } else if (row.getPhysicalNumberOfCells() == 2) {
+//
+//                    }
+                }
+
+            }
+            workbook.close();
         } catch (InvalidFormatException | org.apache.poi.openxml4j.exceptions.InvalidFormatException e) {
             e.printStackTrace();
         }

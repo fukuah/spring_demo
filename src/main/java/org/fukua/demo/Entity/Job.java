@@ -14,8 +14,12 @@ public class Job extends CommonEntity{
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @OneToMany
-    private List<Section> sections = new ArrayList<Section>();
+    private List<Section> sections = new ArrayList<>();
 
     public List<Section> getSections() {
         return sections;
@@ -40,9 +44,6 @@ public class Job extends CommonEntity{
     public void setStatus(JobStatus status) {
         this.status = status;
     }
-
-    @OneToOne
-    private User user;
 
     private JobStatus status = JobStatus.PROCESSING;
 }

@@ -9,9 +9,13 @@ import org.springframework.stereotype.Service;
 public class JobService {
     @Autowired
     private JobRepository jobRepository;
+    @Autowired
+    private UserService userService;
 
-    public Job createJob(Job job){
-        return jobRepository.save(job);
-    }
+     public Job createJob(String username){
+         Job job = new Job();
+         job.setUser(userService.getUserByLogin(username));
+         return job;
+     }
 
 }

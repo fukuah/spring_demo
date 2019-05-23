@@ -7,6 +7,8 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User extends CommonEntity{
@@ -27,6 +29,10 @@ public class User extends CommonEntity{
     @Email
     @NotNull
     private String email;
+
+    @OneToMany
+    private List<Job> jobs = new ArrayList<>();
+
     private Boolean isAdmin = false;
     private UserStatus status = UserStatus.ACTIVATION_NEEDED;
 
