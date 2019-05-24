@@ -46,4 +46,14 @@ public class SectionController {
     public List<Section> getSectionsByJobId(@PathVariable("id") long id) {
         return sectionService.getSectionsByJobId(id);
     }
+
+    @RequestMapping(value="by-class-name/{name}", method={RequestMethod.GET}, produces = "application/json; charset=utf-8")
+    public List<Section> getSectionByGeologicalClassName(@PathVariable("name") String name){
+        return sectionService.getByGeologicalClassName(name);
+    }
+
+    @RequestMapping(value="by-class-code/{code}", method={RequestMethod.GET}, produces = "application/json; charset=utf-8")
+    public List<Section> getSectionByGeologicalClassCode(@PathVariable("code") String code){
+        return sectionService.getByGeologicalClassCode(code);
+    }
 }

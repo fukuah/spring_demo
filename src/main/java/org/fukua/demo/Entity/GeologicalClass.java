@@ -1,5 +1,7 @@
 package org.fukua.demo.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -21,7 +23,13 @@ public class GeologicalClass{
     @NotNull
     private String name;
 
+    @Size(max=1000)
+    @NotNull
+    private String code;
+
+    @JsonBackReference
     @ManyToOne
+    @JoinColumn(name = "section_id")
     private Section section;
 
     public String getName() {
@@ -40,7 +48,7 @@ public class GeologicalClass{
         this.code = code;
     }
 
-    @Size(max=1000)
-    @NotNull
-    private String code;
+    public Section getSection() {
+        return section;
+    }
 }

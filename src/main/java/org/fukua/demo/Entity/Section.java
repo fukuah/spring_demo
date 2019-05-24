@@ -1,6 +1,7 @@
 package org.fukua.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -25,6 +26,7 @@ public class Section  extends CommonEntity{
     @JoinColumn(name = "job_id")
     private Job job;
 
+    @JsonManagedReference
     @OneToMany(cascade = {CascadeType.ALL})
     @JoinColumn(name="section_id")
     private List<GeologicalClass> geologicalClassList = new ArrayList<>();
