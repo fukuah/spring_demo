@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 public class Section  extends CommonEntity{
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
@@ -48,6 +49,8 @@ public class Section  extends CommonEntity{
             if (item.getCode() == null) {
                 throw new GeologicalClassCodeIsNotSetException();
             }
+            // [NOTICE]: as @JsonManagedReference was added we need to set section manually
+            item.setSection(this);
         }
 
         this.geologicalClassList = geologicalClassList;

@@ -54,4 +54,8 @@ public class GeologicalClass{
     public Section getSection() {
         return section;
     }
+
+    public void setSection(Section section) {
+        this.section = section;
+    }
 }
