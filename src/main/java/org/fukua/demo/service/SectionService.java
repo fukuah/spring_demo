@@ -7,16 +7,21 @@ import org.fukua.demo.repository.GeologicalClassRepository;
 import org.fukua.demo.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class SectionService {
+public class SectionService implements Validator{
     @Autowired
     private SectionRepository sectionRepository;
     @Autowired
     private GeologicalClassRepository geologicalClassRepository;
+    @Autowired
+    private GeologicalClassService geologicalClassService;
 
     public void createSection(Job job, String name, List<GeologicalClass> geologicalClassList) {
         Section section = new Section();
@@ -75,5 +80,15 @@ public class SectionService {
         List<Long> sectionIds = getSectionIdListFromGeologicalClassList(geologicalClassList);
 
         return sectionRepository.findAllById(sectionIds);
+    }
+
+    @Override
+    public boolean supports(Class<?> aClass) {
+        return Section.class.equals(aClass);
+    }
+
+    @Override
+    public void validate(Object o, Errors errors) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "Section.name.required");
     }
 }

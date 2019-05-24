@@ -2,9 +2,12 @@ package org.fukua.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.fukua.demo.exception.GeologicalClassCodeIsNotSetException;
+import org.fukua.demo.exception.GeologicalClassNameIsNotSetException;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -16,8 +19,9 @@ public class Section  extends CommonEntity{
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
+    @NotBlank(message = "Name of Section object is required field.")
     @Size(max=2000)
-    @NotNull(message = "Section name is required.")
+    @NotNull
     private String name;
 
     @ManyToOne
@@ -36,6 +40,16 @@ public class Section  extends CommonEntity{
     }
 
     public void setGeologicalClassList(List<GeologicalClass> geologicalClassList) {
+        //TODO improve: validate by spring validator instead
+        for (GeologicalClass item: geologicalClassList) {
+            if (item.getName() == null) {
+                throw new GeologicalClassNameIsNotSetException();
+            }
+            if (item.getCode() == null) {
+                throw new GeologicalClassCodeIsNotSetException();
+            }
+        }
+
         this.geologicalClassList = geologicalClassList;
     }
 

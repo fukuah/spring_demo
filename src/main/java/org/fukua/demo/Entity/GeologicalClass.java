@@ -3,6 +3,7 @@ package org.fukua.demo.Entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -19,10 +20,12 @@ public class GeologicalClass{
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
+    @NotBlank(message = "Name of GeologicalClass object is required field.")
     @Size(max=1000)
     @NotNull
     private String name;
 
+    @NotBlank(message = "Code of GeologicalClass object is required field.")
     @Size(max=1000)
     @NotNull
     private String code;

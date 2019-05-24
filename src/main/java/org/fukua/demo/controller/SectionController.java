@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,12 +20,12 @@ public class SectionController {
     private SectionService sectionService;
 
     @PostMapping
-    public Section createSection(@RequestBody Section section) {
+    public Section createSection(@RequestBody @Valid Section section) {
         return sectionService.createSection(section);
     }
 
     @RequestMapping(value="{id}", method={RequestMethod.PUT}, produces = "application/json; charset=utf-8")
-    public Section updateSection(@PathVariable("id") long id, @RequestBody Section section) {
+    public Section updateSection(@PathVariable("id") long id, @RequestBody @Valid Section section) {
         return sectionService.updateSection(id, section);
     }
 
