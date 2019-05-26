@@ -12,9 +12,9 @@ public class JobService {
     @Autowired
     private UserService userService;
 
-     public Job createJob(String username){
+     public Job createJob(){
          Job job = new Job();
-         job.setUser(userService.getUserByLogin(username));
+//         job.setUser(userService.getUserByLogin(username));
          return jobRepository.save(job);
      }
 

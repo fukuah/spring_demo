@@ -10,8 +10,6 @@ public class Authorities {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
-    @ManyToOne(targetEntity = Users.class)
-    @JoinColumn(name = "username")
     @Size(min=5, max=50)
     @NotNull
     private String username;
@@ -19,6 +17,9 @@ public class Authorities {
     @Size(max=50)
     @NotNull
     private String authority;
+
+    @ManyToOne(targetEntity = Users.class)
+    private Users user;
 
     public String getUsername() {
         return username;
@@ -35,4 +36,5 @@ public class Authorities {
     public void setAuthority(String authority) {
         this.authority = authority;
     }
+
 }

@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -36,12 +39,12 @@ public class JobController {
     private XlsFileParserService parsingService;
 
     @RequestMapping(value="{username}", method={RequestMethod.PUT}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json; charset=utf-8")
-    public ResponseEntity<Map> loadXlsFile(@PathVariable("username") String username, @RequestParam("file") MultipartFile file) throws IOException{
+    public ResponseEntity<Map> loadXlsFile(@RequestParam("file") MultipartFile file) throws IOException{
         Map<String, String> response = new HashMap<>();
 
         try {
             Workbook workbook = WorkbookFactory.create(file.getInputStream());
-            Job job = jobService.createJob(username);
+            Job job = jobService.createJob();
             response.put("job_id", Long.toString(job.getId()));
 
             if (!parsingService.validate(workbook)) {
@@ -55,7 +58,7 @@ public class JobController {
             return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
 
         } catch (InvalidFormatException | org.apache.poi.openxml4j.exceptions.InvalidFormatException e) {
-            Job job = jobService.createJob(username);
+            Job job = jobService.createJob();
             job.setStatus(JobStatus.FAILED);
             jobService.save(job);
 

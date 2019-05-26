@@ -1,5 +1,6 @@
 package org.fukua.demo.Entity;
 
+
 import org.fukua.demo.Entity.Enum.JobStatus;
 
 import javax.persistence.*;
@@ -13,9 +14,9 @@ public class Job extends CommonEntity{
     private long id;
 
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private MyUser user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id")
+//    private Users user;
 
     @OneToMany
     private List<Section> sections = new ArrayList<>();
@@ -28,13 +29,13 @@ public class Job extends CommonEntity{
         this.sections = sections;
     }
 
-    public MyUser getUser() {
-        return user;
-    }
-
-    public void setUser(MyUser user) {
-        this.user = user;
-    }
+//    public Users getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(Users user) {
+//        this.user = user;
+//    }
 
     public JobStatus getStatus() {
         return status;
