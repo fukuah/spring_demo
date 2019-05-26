@@ -41,8 +41,7 @@ public class SectionService implements Validator{
         sectionToUpdate.setName(section.getName());
         sectionToUpdate.setGeologicalClassList(section.getGeologicalClassList());
 
-        sectionRepository.save(section);
-        return sectionRepository.save(section);
+        return sectionRepository.save(sectionToUpdate);
     }
 
     public Section getById(long id) {
