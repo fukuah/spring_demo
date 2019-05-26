@@ -1,7 +1,6 @@
 package org.fukua.demo.service;
 
 import org.fukua.demo.Entity.GeologicalClass;
-import org.fukua.demo.Entity.Job;
 import org.fukua.demo.Entity.Section;
 import org.fukua.demo.repository.GeologicalClassRepository;
 import org.fukua.demo.repository.SectionRepository;
@@ -22,15 +21,6 @@ public class SectionService implements Validator{
     private GeologicalClassRepository geologicalClassRepository;
     @Autowired
     private GeologicalClassService geologicalClassService;
-
-    public void createSection(Job job, String name, List<GeologicalClass> geologicalClassList) {
-        Section section = new Section();
-        section.setJob(job);
-        section.setName(name);
-        section.setGeologicalClassList(geologicalClassList);
-
-        sectionRepository.save(section);
-    }
 
     public Section createSection(Section section){
         return sectionRepository.save(section);
