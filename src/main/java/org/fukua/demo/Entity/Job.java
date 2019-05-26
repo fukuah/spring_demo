@@ -12,9 +12,10 @@ public class Job extends CommonEntity{
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
 
+
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private MyUser user;
 
     @OneToMany
     private List<Section> sections = new ArrayList<>();
@@ -27,11 +28,11 @@ public class Job extends CommonEntity{
         this.sections = sections;
     }
 
-    public User getUser() {
+    public MyUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(MyUser user) {
         this.user = user;
     }
 

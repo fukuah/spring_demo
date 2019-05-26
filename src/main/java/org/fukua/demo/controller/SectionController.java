@@ -31,6 +31,14 @@ public class SectionController {
 
     @RequestMapping(value="{id}", method={RequestMethod.GET}, produces = "application/json; charset=utf-8")
     public Section getSection(@PathVariable("id") long id) {
+
+//        String username2 = "";
+//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        if (principal instanceof UserDetails) {
+//            String username = ((UserDetails) principal).getUsername();
+//           username2 = principal.toString();
+//        }
+
         return sectionService.getById(id);
     }
 
