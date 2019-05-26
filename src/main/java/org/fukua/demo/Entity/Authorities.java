@@ -18,8 +18,8 @@ public class Authorities {
     @NotNull
     private String authority;
 
-    @ManyToOne(targetEntity = Users.class)
-    private Users user;
+    @ManyToOne(targetEntity = User.class)
+    private User user;
 
     public String getUsername() {
         return username;

@@ -14,6 +14,7 @@ public class DemoApplication {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
 
+		// Creates user for basic authentication right after application is launched
 		context.getBean(StartupDemoApplicationScenario.class).createUserForBasicAuthentication();
 	}
 

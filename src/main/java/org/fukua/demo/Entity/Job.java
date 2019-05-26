@@ -14,9 +14,9 @@ public class Job extends CommonEntity{
     private long id;
 
 
-//    @ManyToOne
-//    @JoinColumn(name = "user_id")
-//    private Users user;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany
     private List<Section> sections = new ArrayList<>();
@@ -29,13 +29,9 @@ public class Job extends CommonEntity{
         this.sections = sections;
     }
 
-//    public Users getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(Users user) {
-//        this.user = user;
-//    }
+    public User getUser() { return user; }
+
+    public void setUser(User user) { this.user = user; }
 
     public JobStatus getStatus() {
         return status;

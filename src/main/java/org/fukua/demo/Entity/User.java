@@ -15,7 +15,8 @@ import java.util.List;
  */
 
 @Entity
-public class Users {
+@Table(name="users")
+public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private long id;
@@ -58,11 +59,9 @@ public class Users {
         this.password = password;
     }
 
-    public List<Authorities> getRoles() {
-        return roles;
-    }
+    public List<Authorities> getRoles() { return roles; }
 
-    public void setRoles(List<Authorities> roles) {
-        this.roles = roles;
-    }
+    public void setRoles(List<Authorities> roles) { this.roles = roles; }
+
+    public long getId() { return id; }
 }

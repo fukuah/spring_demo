@@ -38,7 +38,7 @@ public class JobController {
     @Autowired
     private XlsFileParserService parsingService;
 
-    @RequestMapping(value="{username}", method={RequestMethod.PUT}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json; charset=utf-8")
+    @RequestMapping(method={RequestMethod.PUT}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json; charset=utf-8")
     public ResponseEntity<Map> loadXlsFile(@RequestParam("file") MultipartFile file) throws IOException{
         Map<String, String> response = new HashMap<>();
 
