@@ -6,13 +6,13 @@ Test task for Natlex backend developer
 3.  Create database with sql "create database char_test3 character set UTF8mb4 collate utf8mb4_bin"
 
 ## Requirements:
-[x] small restAPI web-application;
-[x] all data (except files) should be in JSON format;
-[x] should have API for adding a job for file parsing ( “register-job”);
-[x] “register-job” should return id of the Job;
-[x] file should be parsed in asynchronous way, result should be stored id db;
-[x] should have API for getting result of parsed file by Job ID;
-[x] should have API for searching results by name, code;
-[x] basic Authorization should be supported (optional);
-[ ] page for jobs adding and result view (optional).
+- [x] small restAPI web-application;
+- [x] all data (except files) should be in JSON format;
+- [x] should have API for adding a job for file parsing ( “register-job”);
+- [x] “register-job” should return id of the Job;
+- [x] file should be parsed in asynchronous way, result should be stored id db;
+- [x] should have API for getting result of parsed file by Job ID;
+- [x] should have API for searching results by name, code;
+- [x] basic Authorization should be supported (optional);
+- [ ] page for jobs adding and result view (optional).
 
