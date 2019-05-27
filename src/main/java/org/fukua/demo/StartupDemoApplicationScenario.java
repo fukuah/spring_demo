@@ -15,7 +15,7 @@ class StartupDemoApplicationScenario {
     @Autowired
     private UserService userService;
 
-    // Fills tables with data for testing
+    // Provides user for basic authentication
     void createUserForBasicAuthentication() {
         String username = "user01", password = "admin", role = "ROLE_USER";
 

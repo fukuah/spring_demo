@@ -2,6 +2,7 @@ package org.fukua.demo.service;
 
 import org.fukua.demo.Entity.GeologicalClass;
 import org.fukua.demo.Entity.Section;
+import org.fukua.demo.exception.SectionIsNotFoundException;
 import org.fukua.demo.repository.GeologicalClassRepository;
 import org.fukua.demo.repository.SectionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class SectionService implements Validator{
 
     public Section updateSection(long id, Section section) {
         Section sectionToUpdate = sectionRepository.getById(id);
+        if (sectionToUpdate == null) {
+            throw new SectionIsNotFoundException();
+        }
         sectionToUpdate.setName(section.getName());
         sectionToUpdate.setGeologicalClassList(section.getGeologicalClassList());
 
