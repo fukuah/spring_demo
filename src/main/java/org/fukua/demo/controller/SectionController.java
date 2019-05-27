@@ -1,6 +1,7 @@
 package org.fukua.demo.controller;
 
 import org.fukua.demo.Entity.Section;
+import org.fukua.demo.service.CustomJsonDataParser;
 import org.fukua.demo.service.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ public class SectionController {
 
     @Autowired
     private SectionService sectionService;
+    @Autowired
+    private CustomJsonDataParser customJsonDataService;
 
     @PostMapping
     public Section createSection(@RequestBody @Valid Section section) {
@@ -31,14 +34,6 @@ public class SectionController {
 
     @RequestMapping(value="{id}", method={RequestMethod.GET}, produces = "application/json; charset=utf-8")
     public Section getSection(@PathVariable("id") long id) {
-
-//        String username2 = "";
-//        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        if (principal instanceof UserDetails) {
-//            String username = ((UserDetails) principal).getUsername();
-//           username2 = principal.toString();
-//        }
-
         return sectionService.getById(id);
     }
 
@@ -56,13 +51,25 @@ public class SectionController {
         return sectionService.getSectionsByJobId(id);
     }
 
-    @RequestMapping(value="by-class-name/{name}", method={RequestMethod.GET}, produces = "application/json; charset=utf-8")
-    public List<Section> getSectionByGeologicalClassName(@PathVariable("name") String name){
+    /*
+     * Json example {"name": "geological_class_name"}
+     * Attribute "name" is required in Json request body else ParsingValueFromCustomJsonException will be thrown
+     */
+    @RequestMapping(value="by-class-name", method={RequestMethod.POST}, produces = "application/json; charset=utf-8")
+    public List<Section> getSectionByGeologicalClassName(@RequestBody String nameJson){
+        String name = customJsonDataService.getSingleJsonParamAsString(nameJson, "name");
+
         return sectionService.getByGeologicalClassName(name);
     }
 
-    @RequestMapping(value="by-class-code/{code}", method={RequestMethod.GET}, produces = "application/json; charset=utf-8")
-    public List<Section> getSectionByGeologicalClassCode(@PathVariable("code") String code){
+    /*
+     * Json example {"code": "geological_class_code"}
+     * Attribute "code" is required in Json request body else ParsingValueFromCustomJsonException will be thrown
+     */
+    @RequestMapping(value="by-class-code", method={RequestMethod.POST}, produces = "application/json; charset=utf-8")
+    public List<Section> getSectionByGeologicalClassCode(@RequestBody String codeJson){
+        String code = customJsonDataService.getSingleJsonParamAsString(codeJson, "code");
+
         return sectionService.getByGeologicalClassCode(code);
     }
 }

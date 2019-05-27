@@ -13,13 +13,13 @@ import java.util.List;
 class StartupDemoApplicationScenario {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     // Fills tables with data for testing
-    public void createUserForBasicAuthentication() {
-        String username = "user011", password = "admin", role = "ROLE_USER";
+    void createUserForBasicAuthentication() {
+        String username = "user01", password = "admin", role = "ROLE_USER";
 
-        System.out.println("---------------------------------APPLICATION AFTER LAUNCH SCENARIO----------------------------------------");
+        System.out.println("----------------------------DEMO APPLICATION AFTER LAUNCH SCENARIO----------------------------------------");
         System.out.println("----------------------------------------------------------------------------------------------------------");
         User user = userService.getUserByLogin(username);
         if (userService.getUserByLogin(username) == null) {
@@ -39,13 +39,12 @@ class StartupDemoApplicationScenario {
             userService.createUser(user);
 
             System.out.println("------------------------------------------------------------------------------------------------------------");
-            System.out.println("------------------------------------------------------------------------------------------------------------");
             System.out.println("---------------------------------------TESTING DATA IS PROVIDED---------------------------------------------");
+            System.out.println("--------*CREATED NEW USER FOR BASIC AUTHENTICATION---------------------------------------------------------");
             System.out.println("---------USE FOR AUTHENTICATION:----------------------------------------------------------------------------");
             System.out.println("-----------------USERNAME: " + username + "----------------------------------------------------------------------------");
             System.out.println("-----------------PASSWORD: " + password + "----------------------------------------------------------------------------");
         } else {
-            System.out.println("------------------------------------------------------------------------------------------------------------");
             System.out.println("------------------------------------------------------------------------------------------------------------");
             System.out.println("---------------------------------------TESTING DATA IS PROVIDED---------------------------------------------");
             System.out.println("---------USE FOR AUTHENTICATION:----------------------------------------------------------------------------");

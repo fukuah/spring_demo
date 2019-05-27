@@ -39,7 +39,7 @@ public class JobController {
     private XlsFileParserService parsingService;
 
     @RequestMapping(method={RequestMethod.PUT}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json; charset=utf-8")
-    public ResponseEntity<Map> loadXlsFile(@RequestParam("file") MultipartFile file) throws IOException{
+    public ResponseEntity<Map> loadXlsFile(@RequestParam("file") MultipartFile file){
         Map<String, String> response = new HashMap<>();
 
         try {
@@ -63,6 +63,10 @@ public class JobController {
             jobService.save(job);
 
             throw new NotXlsOrXlsxFileProvided();
+        } catch (IOException e) {
+            e.printStackTrace();
+            response.put("IOException occurred", e.getMessage());
+            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
