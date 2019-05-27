@@ -40,6 +40,7 @@ public class SectionService implements Validator{
 
     public Section getById(long id) {
         return sectionRepository.getById(id);
+
     }
 
     public List<Section> getSectionsByJobId(long id) {

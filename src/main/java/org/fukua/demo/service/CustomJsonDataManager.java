@@ -2,14 +2,22 @@ package org.fukua.demo.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.fukua.demo.exception.ParsingValueFromCustomJsonException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 @Service
-public class CustomJsonDataParser {
-    public String getSingleJsonParamAsString(String jsonData, String param){
+public class CustomJsonDataManager {
+
+    // Class made to return as valid empty Json
+    @JsonSerialize
+    private class EmptyJsonResponse { }
+
+    public String parseSingleJsonParamAsString(String jsonData, String param){
         ObjectMapper objectMapper = new ObjectMapper();
 
         //read JSON like DOM Parser
@@ -34,5 +42,14 @@ public class CustomJsonDataParser {
         }
 
         return value;
+    }
+
+    // If object is empty returns valid empty Json
+    public ResponseEntity<Object> buildResponse(Object object) {
+        if (object == null) {
+            return new ResponseEntity<>(new EmptyJsonResponse(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(object, HttpStatus.OK);
+        }
     }
 }

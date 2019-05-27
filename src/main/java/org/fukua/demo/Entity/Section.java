@@ -1,6 +1,7 @@
 package org.fukua.demo.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.fukua.demo.exception.GeologicalClassCodeIsNotSetException;
 import org.fukua.demo.exception.GeologicalClassNameIsNotSetException;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@JsonInclude
 public class Section  extends CommonEntity{
     @Id
     @JsonIgnore
