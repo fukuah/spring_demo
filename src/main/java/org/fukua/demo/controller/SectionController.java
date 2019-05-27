@@ -1,7 +1,7 @@
 package org.fukua.demo.controller;
 
 import org.fukua.demo.Entity.Section;
-import org.fukua.demo.service.CustomJsonDataManager;
+import org.fukua.demo.helper.CustomJsonDataHelper;
 import org.fukua.demo.service.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,7 @@ public class SectionController {
     @Autowired
     private SectionService sectionService;
     @Autowired
-    private CustomJsonDataManager customJsonDataManager;
+    private CustomJsonDataHelper customJsonDataHelper;
 
     @PostMapping
     public Section createSection(@RequestBody @Valid Section section) {
@@ -31,14 +31,14 @@ public class SectionController {
     public ResponseEntity<Object> updateSection(@PathVariable("id") long id, @RequestBody @Valid Section section) {
         Section updatedSection = sectionService.updateSection(id, section);
 
-        return customJsonDataManager.buildResponse(section);
+        return customJsonDataHelper.buildResponse(section);
     }
 
     @RequestMapping(value="{id}", method={RequestMethod.GET}, produces = "application/json; charset=utf-8")
     public ResponseEntity<Object> getSection(@PathVariable("id") long id) {
         Section section = sectionService.getById(id);
 
-        return customJsonDataManager.buildResponse(section);
+        return customJsonDataHelper.buildResponse(section);
     }
 
     @RequestMapping(value="{id}", method={RequestMethod.DELETE}, produces = "application/json; charset=utf-8")
@@ -61,7 +61,7 @@ public class SectionController {
      */
     @RequestMapping(value="by-class-name", method={RequestMethod.POST}, produces = "application/json; charset=utf-8")
     public List<Section> getSectionByGeologicalClassName(@RequestBody String nameJson){
-        String name = customJsonDataManager.parseSingleJsonParamAsString(nameJson, "name");
+        String name = customJsonDataHelper.parseSingleJsonParamAsString(nameJson, "name");
 
         return sectionService.getByGeologicalClassName(name);
     }
@@ -72,7 +72,7 @@ public class SectionController {
      */
     @RequestMapping(value="by-class-code", method={RequestMethod.POST}, produces = "application/json; charset=utf-8")
     public List<Section> getSectionByGeologicalClassCode(@RequestBody String codeJson){
-        String code = customJsonDataManager.parseSingleJsonParamAsString(codeJson, "code");
+        String code = customJsonDataHelper.parseSingleJsonParamAsString(codeJson, "code");
 
        return  sectionService.getByGeologicalClassCode(code);
     }

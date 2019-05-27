@@ -48,6 +48,9 @@ public class SectionService implements Validator{
     }
 
     public void deleteSection(long id) {
+        if (sectionRepository.getById(id) == null) {
+            throw new SectionIsNotFoundException();
+        }
         sectionRepository.deleteById(id);
     }
 

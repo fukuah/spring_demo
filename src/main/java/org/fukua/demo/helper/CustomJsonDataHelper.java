@@ -1,4 +1,4 @@
-package org.fukua.demo.service;
+package org.fukua.demo.helper;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
-public class CustomJsonDataManager {
+public class CustomJsonDataHelper {
 
     // Class made to return as valid empty Json
     @JsonSerialize
