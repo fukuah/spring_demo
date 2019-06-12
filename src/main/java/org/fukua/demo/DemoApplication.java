@@ -1,21 +1,64 @@
 package org.fukua.demo;
 
+import org.fukua.demo.Entity.Authorities;
+import org.fukua.demo.Entity.User;
+import org.fukua.demo.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+
+import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 @ComponentScan
 @EnableAutoConfiguration
 public class DemoApplication {
+	@Autowired
+	private UserService userService;
 
 	public static void main(String[] args) {
-		ConfigurableApplicationContext context = SpringApplication.run(DemoApplication.class, args);
-
-		// Creates user for basic authentication right after application is launched
-		context.getBean(StartupDemoApplicationScenario.class).createUserForBasicAuthentication();
+		SpringApplication.run(DemoApplication.class, args);
 	}
 
+	@PostConstruct
+	public void postConstruct(){
+		String username = "user01", password = "admin", role = "ROLE_USER";
+
+		System.out.println("----------------------------DEMO APPLICATION AFTER LAUNCH SCENARIO----------------------------------------");
+		System.out.println("----------------------------------------------------------------------------------------------------------");
+		User user = userService.getUserByLogin(username);
+		if (user == null) {
+			user = new User();
+			user.setEnabled(true);
+			user.setUsername(username);
+			user.setPassword(password);
+			// create Authorities for new user
+			Authorities auths = new Authorities();
+			auths.setAuthority(role);
+			auths.setUsername(username);
+			// set Authorities to new user
+			List<Authorities> roles = new ArrayList<>();
+			roles.add(auths);
+			user.setRoles(roles);
+
+			userService.createUser(user);
+
+			System.out.println("------------------------------------------------------------------------------------------------------------");
+			System.out.println("---------------------------------------TESTING DATA IS PROVIDED---------------------------------------------");
+			System.out.println("--------*CREATED NEW USER FOR BASIC AUTHENTICATION---------------------------------------------------------");
+			System.out.println("---------USE FOR AUTHENTICATION:----------------------------------------------------------------------------");
+			System.out.println("-----------------USERNAME: " + username + "----------------------------------------------------------------------------");
+			System.out.println("-----------------PASSWORD: " + password + "----------------------------------------------------------------------------");
+		} else {
+			System.out.println("------------------------------------------------------------------------------------------------------------");
+			System.out.println("---------------------------------------TESTING DATA IS PROVIDED---------------------------------------------");
+			System.out.println("---------USE FOR AUTHENTICATION:----------------------------------------------------------------------------");
+			System.out.println("-----------------USERNAME: " + user.getUsername() + "---------------------------------------------------------------------------");
+			System.out.println("-----------------PASSWORD: " + user.getPassword() + "----------------------------------------------------------------------------");
+		}
+	}
 }

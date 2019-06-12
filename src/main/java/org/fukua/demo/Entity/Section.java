@@ -42,21 +42,7 @@ public class Section  extends CommonEntity{
         return geologicalClassList;
     }
 
-    public void setGeologicalClassList(List<GeologicalClass> geologicalClassList) {
-        //TODO improve: validate by spring validator instead
-        for (GeologicalClass item: geologicalClassList) {
-            if (item.getName() == null) {
-                throw new GeologicalClassNameIsNotSetException();
-            }
-            if (item.getCode() == null) {
-                throw new GeologicalClassCodeIsNotSetException();
-            }
-            // [NOTICE]: as @JsonManagedReference was added we need to set section manually
-            item.setSection(this);
-        }
-
-        this.geologicalClassList = geologicalClassList;
-    }
+    public void setGeologicalClassList(List<GeologicalClass> geologicalClassList) { this.geologicalClassList = geologicalClassList; }
 
     public long getId() {
         return id;
@@ -80,4 +66,21 @@ public class Section  extends CommonEntity{
         this.job = job;
     }
 
+    // Validates geologicalClasses before create or update
+    // Also set link from geologicalClasses item to section
+    // [NOTICE]: there must be a better way to do that
+    @PrePersist
+    @PreUpdate
+    public void validateGeologicalClasses() {
+        for (GeologicalClass item: geologicalClassList) {
+            if (item.getName() == null) {
+                throw new GeologicalClassNameIsNotSetException();
+            }
+            if (item.getCode() == null) {
+                throw new GeologicalClassCodeIsNotSetException();
+            }
+            // [NOTICE]: as @JsonManagedReference was added we need to set section manually
+            item.setSection(this);
+        }
+    }
 }

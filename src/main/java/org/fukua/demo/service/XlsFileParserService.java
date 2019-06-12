@@ -16,7 +16,7 @@ import java.io.IOException;
 @Service
 @Configuration
 @EnableAsync
-public class XlsFileParserService implements XlsFileParserInterface {
+public class XlsFileParserService {
 
     @Autowired
     private SectionService sectionService;

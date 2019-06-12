@@ -24,6 +24,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 
 @RestController
@@ -37,6 +40,8 @@ public class JobController {
     private SectionService sectionService;
     @Autowired
     private XlsFileParserService parsingService;
+
+    private Logger logger = Logger.getLogger("JobLogger");
 
     @RequestMapping(method={RequestMethod.PUT}, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = "application/json; charset=utf-8")
     public ResponseEntity<Map> loadXlsFile(@RequestParam("file") MultipartFile file){
@@ -64,7 +69,7 @@ public class JobController {
 
             throw new NotXlsOrXlsxFileProvided();
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(new LogRecord(Level.SEVERE, e.getMessage()));
             response.put("IOException occurred", e.getMessage());
             return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
         }

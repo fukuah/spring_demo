@@ -27,21 +27,22 @@ public class SectionController {
         return sectionService.createSection(section);
     }
 
-    @RequestMapping(value="{id}", method={RequestMethod.PUT}, produces = "application/json; charset=utf-8")
-    public ResponseEntity<Object> updateSection(@PathVariable("id") long id, @RequestBody @Valid Section section) {
+    @RequestMapping(value="{id}", method={RequestMethod.PUT}, produces = "application/json")
+    public ResponseEntity<Section> updateSection(@PathVariable("id") long id, @RequestBody @Valid Section section) {
         Section updatedSection = sectionService.updateSection(id, section);
 
-        return customJsonDataHelper.buildResponse(section);
+        return new ResponseEntity<>(section, HttpStatus.OK);
     }
 
-    @RequestMapping(value="{id}", method={RequestMethod.GET}, produces = "application/json; charset=utf-8")
-    public ResponseEntity<Object> getSection(@PathVariable("id") long id) {
+    @ResponseBody
+    @RequestMapping(value="{id}", method={RequestMethod.GET}, produces = "application/json")
+    public ResponseEntity<Section> getSection(@PathVariable("id") long id) {
         Section section = sectionService.getById(id);
 
-        return customJsonDataHelper.buildResponse(section);
+        return new ResponseEntity<>(section, HttpStatus.OK);
     }
 
-    @RequestMapping(value="{id}", method={RequestMethod.DELETE}, produces = "application/json; charset=utf-8")
+    @RequestMapping(value="{id}", method={RequestMethod.DELETE}, produces = "application/json")
     public ResponseEntity<Object> deleteSection(@PathVariable("id") long id) {
         sectionService.deleteSection(id);
 
@@ -50,30 +51,18 @@ public class SectionController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(value="of-job/{id}", method={RequestMethod.GET}, produces = "application/json; charset=utf-8")
+    @RequestMapping(value="of-job/{id}", method={RequestMethod.GET}, produces = "application/json")
     public List<Section> getSectionsByJobId(@PathVariable("id") long id) {
         return sectionService.getSectionsByJobId(id);
     }
 
-    /*
-     * Json example {"name": "geological_class_name"}
-     * Attribute "name" is required in Json request body else ParsingValueFromCustomJsonException will be thrown
-     */
-    @RequestMapping(value="by-class-name", method={RequestMethod.POST}, produces = "application/json; charset=utf-8")
-    public List<Section> getSectionByGeologicalClassName(@RequestBody String nameJson){
-        String name = customJsonDataHelper.parseSingleJsonParamAsString(nameJson, "name");
-
+    @RequestMapping(value="by-class-name/{name}", method={RequestMethod.GET}, produces = "application/json")
+    public List<Section> getSectionByGeologicalClassName(@PathVariable("name") String name){
         return sectionService.getByGeologicalClassName(name);
     }
 
-    /*
-     * Json example {"code": "geological_class_code"}
-     * Attribute "code" is required in Json request body else ParsingValueFromCustomJsonException will be thrown
-     */
-    @RequestMapping(value="by-class-code", method={RequestMethod.POST}, produces = "application/json; charset=utf-8")
-    public List<Section> getSectionByGeologicalClassCode(@RequestBody String codeJson){
-        String code = customJsonDataHelper.parseSingleJsonParamAsString(codeJson, "code");
-
+    @RequestMapping(value="by-class-code/{code}", method={RequestMethod.GET}, produces = "application/json")
+    public List<Section> getSectionByGeologicalClassCode(@PathVariable("code") String code){
        return  sectionService.getByGeologicalClassCode(code);
     }
 }

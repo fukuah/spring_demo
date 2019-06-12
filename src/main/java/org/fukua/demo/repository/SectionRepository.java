@@ -11,5 +11,4 @@ public interface SectionRepository extends JpaRepository<Section, Long> {
     Section getById(long id);
 
     List<Section> getByJobId(long id);
-
 }
