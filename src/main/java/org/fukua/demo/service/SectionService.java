@@ -1,6 +1,5 @@
 package org.fukua.demo.service;
 
-import org.fukua.demo.Entity.GeologicalClass;
 import org.fukua.demo.Entity.Section;
 import org.fukua.demo.exception.SectionIsNotFoundException;
 import org.fukua.demo.repository.GeologicalClassRepository;
@@ -11,7 +10,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,6 +33,7 @@ public class SectionService implements Validator{
         sectionToUpdate.setName(section.getName());
         sectionToUpdate.setGeologicalClassList(section.getGeologicalClassList());
 
+
         return sectionRepository.save(sectionToUpdate);
     }
 
@@ -54,29 +53,12 @@ public class SectionService implements Validator{
         sectionRepository.deleteById(id);
     }
 
-    private List<Long> getSectionIdListFromGeologicalClassList(List<GeologicalClass> geologicalClassList){
-        List<Long> sectionIds = new ArrayList<>();
-        long id;
-        for (GeologicalClass item: geologicalClassList) {
-            id = item.getSection().getId();
-            sectionIds.add(id);
-        }
-
-        return sectionIds;
-    }
-
     public List<Section> getByGeologicalClassName(String name) {
-        List<GeologicalClass> geologicalClassList = geologicalClassRepository.findSectionIdByName(name);
-        List<Long> sectionIds = getSectionIdListFromGeologicalClassList(geologicalClassList);
-
-        return sectionRepository.findAllById(sectionIds);
+        return sectionRepository.getByGeologicalClassName(name);
     }
 
     public List<Section> getByGeologicalClassCode(String code) {
-        List<GeologicalClass> geologicalClassList = geologicalClassRepository.findSectionIdByCode(code);
-        List<Long> sectionIds = getSectionIdListFromGeologicalClassList(geologicalClassList);
-
-        return sectionRepository.findAllById(sectionIds);
+        return sectionRepository.getByGeologicalClassCode(code);
     }
 
     @Override
@@ -88,4 +70,5 @@ public class SectionService implements Validator{
     public void validate(Object o, Errors errors) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "Section.name.required");
     }
+
 }
