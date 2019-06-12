@@ -42,7 +42,14 @@ public class Section  extends CommonEntity{
         return geologicalClassList;
     }
 
-    public void setGeologicalClassList(List<GeologicalClass> geologicalClassList) { this.geologicalClassList = geologicalClassList; }
+    public void setGeologicalClassList(List<GeologicalClass> geologicalClassList) {
+        this.geologicalClassList = geologicalClassList;
+        for (GeologicalClass item: geologicalClassList) {
+            // [NOTICE]: as @JsonManagedReference was added we need to set section manually
+            item.setSection(this);
+        }
+
+    }
 
     public long getId() {
         return id;
@@ -79,8 +86,6 @@ public class Section  extends CommonEntity{
             if (item.getCode() == null) {
                 throw new GeologicalClassCodeIsNotSetException();
             }
-            // [NOTICE]: as @JsonManagedReference was added we need to set section manually
-            item.setSection(this);
         }
     }
 }
