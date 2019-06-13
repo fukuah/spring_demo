@@ -33,7 +33,6 @@ public class SectionService implements Validator{
         sectionToUpdate.setName(section.getName());
         sectionToUpdate.setGeologicalClassList(section.getGeologicalClassList());
 
-
         return sectionRepository.save(sectionToUpdate);
     }
 
